@@ -6,32 +6,50 @@ type Todo = {
   id: number;
   text: string;
   completed: boolean;
+  deletedAt?: number;
 };
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [trash, setTrash] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showTrash, setShowTrash] = useState(false);
 
   // READ (Cargar de localStorage)
   useEffect(() => {
-    const saved = localStorage.getItem("bpds_todos");
-    if (saved) {
+    const savedTodos = localStorage.getItem("bpds_todos");
+    const savedTrash = localStorage.getItem("bpds_trash");
+    if (savedTodos) {
       try {
-        setTodos(JSON.parse(saved));
+        setTodos(JSON.parse(savedTodos));
       } catch (e) {
-        console.error("Error cargando localStorage", e);
+        console.error("Error cargando localStorage (todos)", e);
+      }
+    }
+    if (savedTrash) {
+      try {
+        setTrash(JSON.parse(savedTrash));
+      } catch (e) {
+        console.error("Error cargando localStorage (trash)", e);
       }
     }
     setIsLoaded(true);
   }, []);
 
-  // Persistir cambios
+  // Persistir cambios (tareas activas)
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("bpds_todos", JSON.stringify(todos));
     }
   }, [todos, isLoaded]);
+
+  // Persistir cambios (papelera)
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("bpds_trash", JSON.stringify(trash));
+    }
+  }, [trash, isLoaded]);
 
   // CREATE (Únicamente con tecla Enter)
   const addTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -65,9 +83,31 @@ export default function Home() {
     );
   };
 
-  // DELETE
+  // DELETE (envía a la papelera en vez de borrar)
   const deleteTodo = (id: number) => {
+    const target = todos.find((t) => t.id === id);
+    if (!target) return;
     setTodos(todos.filter((todo) => todo.id !== id));
+    setTrash([{ ...target, deletedAt: Date.now() }, ...trash]);
+  };
+
+  // RESTORE (devolver de la papelera a la lista activa)
+  const restoreTodo = (id: number) => {
+    const target = trash.find((t) => t.id === id);
+    if (!target) return;
+    const { deletedAt, ...restored } = target;
+    setTrash(trash.filter((t) => t.id !== id));
+    setTodos([restored, ...todos]);
+  };
+
+  // PERMANENT DELETE (borrar definitivamente desde la papelera)
+  const permanentlyDeleteTodo = (id: number) => {
+    setTrash(trash.filter((t) => t.id !== id));
+  };
+
+  // Vaciar papelera completa
+  const emptyTrash = () => {
+    setTrash([]);
   };
 
   const completedCount = todos.filter((t) => t.completed).length;
@@ -141,7 +181,7 @@ export default function Home() {
                   }`}
                 />
 
-                {/* Botón Eliminar */}
+                {/* Botón Eliminar (envía a papelera) */}
                 <button
                   type="button"
                   onClick={() => deleteTodo(todo.id)}
@@ -153,6 +193,66 @@ export default function Home() {
             ))
           )}
         </ul>
+
+        {/* Toggle Papelera */}
+        <div className="border-t border-zinc-800 pt-4 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setShowTrash(!showTrash)}
+            className="text-xs text-zinc-400 hover:text-zinc-100 flex items-center gap-2 transition-colors"
+          >
+            <span className="w-5 h-5 rounded-md bg-zinc-800 flex items-center justify-center text-[10px]">
+              🗑
+            </span>
+            Papelera ({trash.length})
+            <span className="text-zinc-600">{showTrash ? "▲" : "▼"}</span>
+          </button>
+          {trash.length > 0 && showTrash && (
+            <button
+              type="button"
+              onClick={emptyTrash}
+              className="text-xs text-red-400/80 hover:text-red-400 transition-colors"
+            >
+              Vaciar papelera
+            </button>
+          )}
+        </div>
+
+        {/* Lista de la Papelera */}
+        {showTrash && (
+          <ul className="space-y-2">
+            {trash.length === 0 ? (
+              <li className="text-center py-6 text-zinc-600 text-xs border border-dashed border-zinc-800 rounded-xl">
+                La papelera está vacía.
+              </li>
+            ) : (
+              trash.map((todo) => (
+                <li
+                  key={todo.id}
+                  className="flex items-center justify-between gap-3 bg-zinc-900/30 border border-zinc-800/60 p-3 rounded-xl"
+                >
+                  <span className="flex-1 text-sm text-zinc-500 line-through truncate">
+                    {todo.text}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => restoreTodo(todo.id)}
+                    className="text-xs text-emerald-500/90 hover:text-emerald-400 p-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors"
+                  >
+                    Restaurar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => permanentlyDeleteTodo(todo.id)}
+                    className="text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                  >
+                    Borrar
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        )}
 
       </main>
     </div>
