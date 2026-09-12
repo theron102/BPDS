@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# titulo del proyecto 
 
-## Getting Started
+TODO LIST
 
-First, run the development server:
+# Descripción
 
-```bash
+este proyecto es un TODO LIST que tiene el proposito de gestionar tareas y cambiarlas a hechas o eliminarlas ademas de poder recuperarlas de la papelera,otro proposito es sacar un 5.0 en la materia 
+
+# Funcionalidades principales
+
+- Funcionalidad 1 ( gestión de tareas)
+- Funcionalidad 2 (eliminara tareas )
+- funcionalidad 3 (cambiar de estado una tarea a hecha )
+- Funcionalidad 4 (contador de tareas y tareas completadas )
+- Papelera: permite recuperar o eliminar definitivamente elementos borrados previamente.
+
+# Capturas de pantalla
+
+esta captura es del menu del TODO LIST
+![Pantalla de inicio](capturas/captura.png)
+esta capturta muestra la sfunciones que tiene el TODO LIST, el crear una tarea , completarla , moverla a la papelera y el borrarla definitivamente 
+![funciones de todo list](capturas/estados.png)
+
+
+# Funcionalidad de papelera
+
+La papelera permite gestionar los elementos eliminados sin perderlos de forma permanente:
+
+Al eliminar un elemento, este no se borra inmediatamente, sino que se mueve a la papelera.
+Desde la papelera, el usuario puede restaurar un elemento para devolverlo a su ubicación original.
+ambién puede eliminar definitivamente un elemento desde la papelera, lo cual sí borra el registro de forma permanente.
+
+icono de la papelera 
+![Papelera](capturas/papelera.png)
+
+icono de eliminar
+![eliminar tarea](capturas/eliminar.png)
+
+icono de borrar tarea definitivamente 
+![borrar definitivamente](capturas/borrar.png)
+
+# Instalación
+
+Clona el repositorio e instala las dependencias:
+
+git bash
+git clone https://github.com/theron102/BPDS.git
+cd BPDS
+npm install
+
+# Ejecución local
+
+Para correr el proyecto en modo desarrollo:
+
+git bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Luego abrir  [http://localhost:3000](http://localhost:3000) en el navegador 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Integrantes del equipo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- MATIAS MORALES RODRIQUEZ — matiasmorazul198720-blip
+- REATIGA VILLADIEGO KEVIN ANDRES — Noxus2OO7
+- SANTIZ MESTRE SEBASTIAN — 
+- PALOMINO PINZON GABRIEL — theron102
