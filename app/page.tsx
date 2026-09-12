@@ -9,6 +9,26 @@ type Todo = {
   deletedAt?: number;
 };
 
+function TrashIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 6h18" />
+      <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [trash, setTrash] = useState<Todo[]>([]);
@@ -181,12 +201,13 @@ export default function Home() {
                   }`}
                 />
 
-                {/* Botón Eliminar (envía a papelera) */}
+                {/* Botón Eliminar (envía a papelera) — ahora con ícono SVG */}
                 <button
                   type="button"
                   onClick={() => deleteTodo(todo.id)}
-                  className="text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                  className="flex items-center gap-1 text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
                 >
+                  <TrashIcon className="w-4 h-4" />
                   Eliminar
                 </button>
               </li>
@@ -194,15 +215,15 @@ export default function Home() {
           )}
         </ul>
 
-        {/* Toggle Papelera */}
+        {/* Toggle Papelera — el emoji 🗑 fue reemplazado por el ícono SVG */}
         <div className="border-t border-zinc-800 pt-4 flex items-center justify-between">
           <button
             type="button"
             onClick={() => setShowTrash(!showTrash)}
             className="text-xs text-zinc-400 hover:text-zinc-100 flex items-center gap-2 transition-colors"
           >
-            <span className="w-5 h-5 rounded-md bg-zinc-800 flex items-center justify-center text-[10px]">
-              🗑
+            <span className="w-5 h-5 rounded-md bg-zinc-800 flex items-center justify-center">
+              <TrashIcon className="w-3.5 h-3.5" />
             </span>
             Papelera ({trash.length})
             <span className="text-zinc-600">{showTrash ? "▲" : "▼"}</span>
@@ -222,7 +243,8 @@ export default function Home() {
         {showTrash && (
           <ul className="space-y-2">
             {trash.length === 0 ? (
-              <li className="text-center py-6 text-zinc-600 text-xs border border-dashed border-zinc-800 rounded-xl">
+              <li className="flex flex-col items-center justify-center gap-2 py-6 text-zinc-600 text-xs border border-dashed border-zinc-800 rounded-xl">
+                <TrashIcon className="w-6 h-6 text-zinc-700" />
                 La papelera está vacía.
               </li>
             ) : (
@@ -244,8 +266,9 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => permanentlyDeleteTodo(todo.id)}
-                    className="text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                    className="flex items-center gap-1 text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
                   >
+                    <TrashIcon className="w-3.5 h-3.5" />
                     Borrar
                   </button>
                 </li>
