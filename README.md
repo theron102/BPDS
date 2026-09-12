@@ -17,8 +17,11 @@ este proyecto es un TODO LIST que tiene el proposito de gestionar tareas y cambi
 # Capturas de pantalla
 
 esta captura es del menu del TODO LIST
+
 ![Pantalla de inicio](capturas/captura.png)
+
 esta capturta muestra la sfunciones que tiene el TODO LIST, el crear una tarea , completarla , moverla a la papelera y el borrarla definitivamente 
+
 ![funciones de todo list](capturas/estados.png)
 
 
@@ -31,22 +34,25 @@ Desde la papelera, el usuario puede restaurar un elemento para devolverlo a su u
 ambién puede eliminar definitivamente un elemento desde la papelera, lo cual sí borra el registro de forma permanente.
 
 icono de la papelera 
+
 ![Papelera](capturas/papelera.png)
 
 icono de eliminar
+
 ![eliminar tarea](capturas/eliminar.png)
 
 icono de borrar tarea definitivamente 
+
 ![borrar definitivamente](capturas/borrar.png)
 
 # Instalación
 
 Clona el repositorio e instala las dependencias:
 
-git bash
-git clone https://github.com/theron102/BPDS.git
-cd bpds
-npm install
+- git bash
+- git clone https://github.com/theron102/BPDS.git
+- cd bpds
+- npm install
 
 Este comando lee el archivo `package.json` del proyecto y descarga automáticamente todas las librerías necesarias para su funcionamiento (Next.js, React, entre otras), guardándolas en la carpeta `node_modules`. Este paso solo es necesario la primera vez, o cada vez que se agreguen nuevas dependencias al proyecto.
 
@@ -55,8 +61,8 @@ Este comando lee el archivo `package.json` del proyecto y descarga automáticame
 
 Para correr el proyecto en modo desarrollo:
 
-git bash
-npm run dev
+- git bash
+- npm run dev
 
 Este comando inicia un servidor de desarrollo local:
  [http://localhost:3000](http://localhost:3000)
