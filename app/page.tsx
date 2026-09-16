@@ -36,7 +36,6 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showTrash, setShowTrash] = useState(false);
 
-  // READ (Cargar de localStorage)
   useEffect(() => {
     const savedTodos = localStorage.getItem("bpds_todos");
     const savedTrash = localStorage.getItem("bpds_trash");
@@ -57,21 +56,18 @@ export default function Home() {
     setIsLoaded(true);
   }, []);
 
-  // Persistir cambios (tareas activas)
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("bpds_todos", JSON.stringify(todos));
     }
   }, [todos, isLoaded]);
 
-  // Persistir cambios (papelera)
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("bpds_trash", JSON.stringify(trash));
     }
   }, [trash, isLoaded]);
 
-  // CREATE (Únicamente con tecla Enter)
   const addTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTodo.trim() !== "") {
       const todo: Todo = {
@@ -85,7 +81,6 @@ export default function Home() {
     }
   };
 
-  // UPDATE (Tachar / Destachar)
   const toggleTodo = (id: number) => {
     setTodos(
       todos.map((todo) =>
@@ -94,7 +89,6 @@ export default function Home() {
     );
   };
 
-  // UPDATE (Editar texto directamente)
   const updateTodo = (id: number, newText: string) => {
     setTodos(
       todos.map((todo) =>
@@ -103,7 +97,6 @@ export default function Home() {
     );
   };
 
-  // DELETE (envía a la papelera en vez de borrar)
   const deleteTodo = (id: number) => {
     const target = todos.find((t) => t.id === id);
     if (!target) return;
@@ -111,7 +104,6 @@ export default function Home() {
     setTrash([{ ...target, deletedAt: Date.now() }, ...trash]);
   };
 
-  // RESTORE (devolver de la papelera a la lista activa)
   const restoreTodo = (id: number) => {
     const target = trash.find((t) => t.id === id);
     if (!target) return;
@@ -120,12 +112,10 @@ export default function Home() {
     setTodos([restored, ...todos]);
   };
 
-  // PERMANENT DELETE (borrar definitivamente desde la papelera)
   const permanentlyDeleteTodo = (id: number) => {
     setTrash(trash.filter((t) => t.id !== id));
   };
 
-  // Vaciar papelera completa
   const emptyTrash = () => {
     setTrash([]);
   };
@@ -133,79 +123,73 @@ export default function Home() {
   const completedCount = todos.filter((t) => t.completed).length;
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-100 flex flex-col items-center justify-start p-6 sm:p-12 font-sans">
-      <main className="w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)] flex flex-col items-center justify-start p-6 sm:p-12 font-sans transition-colors">
+      <main className="w-full max-w-xl bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
         
-        {/* Encabezado y Estadísticas */}
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-5">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--color-border)] pb-5">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--color-foreground)]">
               TODO LIST
             </h1>
-            <p className="text-xs text-zinc-400">BPDS Project · Next.js CRUD</p>
+            <p className="text-xs text-[var(--color-muted)]">BPDS Project · Next.js CRUD</p>
           </div>
           <div className="flex gap-2">
-            <span className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-[var(--color-background)] text-[var(--color-foreground)] border border-[var(--color-border)] px-3 py-1 rounded-full font-medium">
               Total: {todos.length}
             </span>
-            <span className="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] border border-[var(--color-secondary)]/30 px-3 py-1 rounded-full font-medium">
               Hechas: {completedCount}
             </span>
           </div>
         </header>
 
-        {/* CREATE Input (Sin botón) */}
         <input
           type="text"
           placeholder="Escribe una tarea y presiona Enter"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           onKeyDown={addTodo}
-          className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+          className="w-full bg-[var(--color-background)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm text-[var(--color-foreground)] placeholder-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-all"
         />
 
-        {/* READ & UPDATE & DELETE List */}
         <ul className="space-y-2">
           {todos.length === 0 ? (
-            <li className="text-center py-10 text-zinc-500 text-sm border border-dashed border-zinc-800 rounded-xl">
+            <li className="text-center py-10 text-[var(--color-muted)] text-sm border border-dashed border-[var(--color-border)] rounded-xl">
               No hay tareas registradas. Escribe una arriba y presiona Enter.
             </li>
           ) : (
             todos.map((todo) => (
               <li
                 key={todo.id}
-                className="group flex items-center justify-between gap-3 bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 p-3 rounded-xl transition-all"
+                className="group flex items-center justify-between gap-3 bg-[var(--color-background)]/50 hover:bg-[var(--color-background)] border border-[var(--color-border)] p-3 rounded-xl transition-all"
               >
-                {/* Botón Tachar/Completar */}
                 <button
                   type="button"
                   onClick={() => toggleTodo(todo.id)}
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${
+                  className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold transition-all ${
                     todo.completed
-                      ? "bg-emerald-500 text-zinc-950"
-                      : "border border-zinc-700 text-transparent hover:border-zinc-500"
+                      ? "bg-[var(--color-primary)] text-zinc-950 shadow-sm"
+                      : "border border-[var(--color-border)] text-transparent hover:border-[var(--color-primary)]"
                   }`}
                 >
                   ✓
                 </button>
 
-                {/* Input Edición Inline */}
                 <input
                   type="text"
                   value={todo.text}
                   onChange={(e) => updateTodo(todo.id, e.target.value)}
-                  className={`flex-1 bg-transparent text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500/50 rounded px-1 transition-all ${
+                  className={`flex-1 bg-transparent text-sm focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]/50 rounded px-1 transition-all ${
                     todo.completed
-                      ? "line-through text-zinc-500"
-                      : "text-zinc-200"
+                      ? "line-through text-[var(--color-muted)]"
+                      : "text-[var(--color-foreground)]"
                   }`}
                 />
 
-                {/* Botón Eliminar (envía a papelera) — ahora con ícono SVG */}
                 <button
                   type="button"
                   onClick={() => deleteTodo(todo.id)}
-                  className="flex items-center gap-1 text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                  className="flex items-center gap-1 text-xs text-[var(--color-muted)] hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
                 >
                   <TrashIcon className="w-4 h-4" />
                   Eliminar
@@ -215,18 +199,17 @@ export default function Home() {
           )}
         </ul>
 
-        {/* Toggle Papelera — el emoji 🗑 fue reemplazado por el ícono SVG */}
-        <div className="border-t border-zinc-800 pt-4 flex items-center justify-between">
+        <div className="border-t border-[var(--color-border)] pt-4 flex items-center justify-between">
           <button
             type="button"
             onClick={() => setShowTrash(!showTrash)}
-            className="text-xs text-zinc-400 hover:text-zinc-100 flex items-center gap-2 transition-colors"
+            className="text-xs text-[var(--color-muted)] hover:text-[var(--color-foreground)] flex items-center gap-2 transition-colors"
           >
-            <span className="w-5 h-5 rounded-md bg-zinc-800 flex items-center justify-center">
+            <span className="w-5 h-5 rounded-md bg-[var(--color-background)] flex items-center justify-center border border-[var(--color-border)]">
               <TrashIcon className="w-3.5 h-3.5" />
             </span>
             Papelera ({trash.length})
-            <span className="text-zinc-600">{showTrash ? "▲" : "▼"}</span>
+            <span className="opacity-60">{showTrash ? "▲" : "▼"}</span>
           </button>
           {trash.length > 0 && showTrash && (
             <button
@@ -239,34 +222,33 @@ export default function Home() {
           )}
         </div>
 
-        {/* Lista de la Papelera */}
         {showTrash && (
           <ul className="space-y-2">
             {trash.length === 0 ? (
-              <li className="flex flex-col items-center justify-center gap-2 py-6 text-zinc-600 text-xs border border-dashed border-zinc-800 rounded-xl">
-                <TrashIcon className="w-6 h-6 text-zinc-700" />
+              <li className="flex flex-col items-center justify-center gap-2 py-6 text-[var(--color-muted)] text-xs border border-dashed border-[var(--color-border)] rounded-xl">
+                <TrashIcon className="w-6 h-6 opacity-40" />
                 La papelera está vacía.
               </li>
             ) : (
               trash.map((todo) => (
                 <li
                   key={todo.id}
-                  className="flex items-center justify-between gap-3 bg-zinc-900/30 border border-zinc-800/60 p-3 rounded-xl"
+                  className="flex items-center justify-between gap-3 bg-[var(--color-background)]/30 border border-[var(--color-border)]/60 p-3 rounded-xl"
                 >
-                  <span className="flex-1 text-sm text-zinc-500 line-through truncate">
+                  <span className="flex-1 text-sm text-[var(--color-muted)] line-through truncate">
                     {todo.text}
                   </span>
                   <button
                     type="button"
                     onClick={() => restoreTodo(todo.id)}
-                    className="text-xs text-emerald-500/90 hover:text-emerald-400 p-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors"
+                    className="text-xs text-[var(--color-secondary)] hover:opacity-80 p-1.5 rounded-lg hover:bg-[var(--color-secondary)]/10 transition-colors"
                   >
                     Restaurar
                   </button>
                   <button
                     type="button"
                     onClick={() => permanentlyDeleteTodo(todo.id)}
-                    className="flex items-center gap-1 text-xs text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                    className="flex items-center gap-1 text-xs text-[var(--color-muted)] hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
                   >
                     <TrashIcon className="w-3.5 h-3.5" />
                     Borrar
