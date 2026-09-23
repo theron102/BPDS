@@ -129,9 +129,9 @@ export default function Home() {
         <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--color-border)] pb-5">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-[var(--color-foreground)]">
-              TODO LIST
+              TODO LIST PROJECT WITH VERCEL
             </h1>
-            <p className="text-xs text-[var(--color-muted)]">BPDS Project from me · Next.js CRUD</p>
+            <p className="text-xs text-[var(--color-muted)]">BPDS Project · Next.js CRUD</p>
           </div>
           <div className="flex gap-2">
             <span className="text-xs bg-[var(--color-background)] text-[var(--color-foreground)] border border-[var(--color-border)] px-3 py-1 rounded-full font-medium">
