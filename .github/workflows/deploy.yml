@@ -17,6 +17,7 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: run build
 
       - name: Configurar credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v6
