@@ -1,4 +1,4 @@
-name: Publicar sitio S3
+name: Publicar sitio en S3
 
 on:
   push:
@@ -17,15 +17,15 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm build
+      - run: npm run build
 
-      - name: Configurar credenciales de AWS
-        uses: aws-actions/configure-aws-credentials@v6
+      - name: Credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
-      - name: Subir estáticos (_next) a S3
+      - name: Subir out/ a S3
         run: aws s3 sync ./out s3://${{ secrets.S3_BUCKET }} --delete
